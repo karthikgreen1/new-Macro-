@@ -1,0 +1,89 @@
+35.196.125.77
+
+
+---
+serverinventory:
+{% for item in csvfile.split("\n") %}
+{%   if loop.index != 1 %}
+{%     set list = item.split(",") %}
+  - Requested_By: '{{ list[0]|trim() }}'
+    environment: '{{ list[1]|trim() }}'
+    configuration_item: '{{ list[2]|trim() }}'
+    Patching_Type: '{{ list[3]|trim() }}'
+    assignment_group: '{{ list[4]|trim() }}'
+    assigned_to: '{{ list[5]|trim() }}'
+    change_coordinator: '{{ list[6]|trim() }}'
+    start_date: '{{ list[7]|trim() }}'
+    end_date: '{{ list[8]|trim() }}'
+    short_description: '{{ list[9]|trim() }}'
+    description: '{{ list[10]|trim() }}'
+    implementation_plan: '{{ list[11]|trim() }}'
+    backout_plan: '{{ list[12]|trim() }}'
+    test_plan: '{{ list[13]|trim() }}'
+    Technical_Approver: '{{ list[14]|trim() }}'
+    Director_Approver: '{{ list[15]|trim() }}'
+    Sr_Director_Approver: '{{ list[16]|trim() }}'
+    VP_Approver: '{{ list[17]|trim() }}'
+    Product_Approver: '{{ list[18]|trim() }}'
+    
+  
+{%   endif %}
+{% endfor %}
+
+
+
+
+
+
+
+---
+serverinventory:
+{% for item in csvfile.split("\n") %}
+{%   if loop.index != 1 %}
+{%     set list = item.split(",") %}
+  - configuration_item: '{{ list[0]|trim() }}'
+    environment: '{{ list[1]|trim() }}'
+    assignment_group: '{{ list[2]|trim() }}'
+    assigned_to: '{{ list[3]|trim() }}'
+    change_coordinator: '{{ list[4]|trim() }}'
+    start_date: '{{ list[5]|trim() }}'
+    end_date: '{{ list[6]|trim() }}'
+    short_description: '{{ list[7]|trim() }}'
+    description: '{{ list[8]|trim() }}'
+    implementation_plan: '{{ list[9]|trim() }}'
+    backout_plan: '{{ list[10]|trim() }}'
+    test_plan: '{{ list[11]|trim() }}'
+    Technical_Approver: '{{ list[12]|trim() }}'
+    Director_Approver: '{{ list[13]|trim() }}'
+    Sr_Director_Approver: '{{ list[14]|trim() }}'
+  
+{%   endif %}
+{% endfor %}
+
+
+---
+- gather_facts: false
+  hosts: localhost
+  vars_files:
+    - Server_Inventory_hosts.yml
+  tasks:
+  - name: Create a change ticket in SNOW 
+    register: new_change_request
+
+
+
+        cmdb_ci: "{{item.configuration_item}}"
+        u_environment: "{{item.environment}}"
+        assignment_group: "{{item.assignment_group}}"
+        assigned_to: "{{item.assigned_to}}"
+        u_change_coordinator: "{{item.change_coordinator}}"
+        start_date: "{{item.start_date}}"
+        end_date: "{{item.end_date}}"
+        short_description: "{{item.short_description}}"
+        description: "{{item.description}}"
+        implementation_plan: "{{item.implementation_plan}}"
+        backout_plan: "{{item.backout_plan}}"
+        test_plan: "{{item.test_plan}}"
+        u_technical_approver: "{{item.Technical_Approver}}"
+        u_director_approval: "{{item.Director_Approver}}"
+        u_sr_director_approval: "{{item.Sr_Director_Approver}}"
